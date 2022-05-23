@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        title {text-align: center;}
+        h1 {text-align: center;}
+        p {text-align: center;}
+        label {text-align: center;}
+        button {
+          background-color: #4CAF50; /* Green */
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          border-radius: 8px;
+        }
+    </style>
+    <title>{% block title %} Schedule in Process... {% endblock %}</title>
+</head>
+<body>
+    {% block heading %} Schedule Processing... {% endblock %}
+    {% block para %} {% endblock %}
+    {% block create_schedule %} {% endblock %}
+
+    {% block date_select %}
+        {% if select_date == True %}
+            <center>
+            <form method="POST" name="date_select">{% csrf_token %}
+              <label>
+                  <b>Enter a stocktake date to create a schedule (required, May 1st to 30th):</b>
+                <input type="date" name="party" min="2022-05-01" max="2022-05-30" required placeholder="2000-01-01">
+                <span class="validity"></span>
+              </label>
+
+              <p>
+                <button name="submit-date">Submit</button>
+              </p>
+            </form>
+            </center>s
+        {% endif %}
+    {% endblock %}
+
+    {% block shop_select %}
+        {% if date_selected == True %}
+            <p> Only select 3 shops for code to not break! </p>
+            <span></span>
+            <form method="POST" name="shops_select"> {% csrf_token %}
+                {% for s in shops %} {# {{ forloop.counter0 }} #}
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="sample_{{ forloop.counter0 }}" value="{{ s }}"></td>
+                            <td>{{s}}</td>
+                        </tr>
+                    </tbody>
+                {% endfor %}
+                <button name="submit-shops">Submit</button>
+            </form>
+        {% endif %}
+    {% endblock %}
+
+    {% block show_selected_shops %}
+        {% if selected_shops %}
+            <p> {{ selected_shops|length }} shops selected are as follows: </p>
+            {% for i in selected_shops %}
+                <p> -> {{ i }} </p>
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+
+    {% block availability_select %}
+        {% if show_availability == True %}
+            <p> Check availability of employees! </p>
+            <span></span>
+            <form method="POST" name="emp_avail_select"> {% csrf_token %}
+                <tbody>
+                    {% for key, value in availability.items %}
+                        <tr>
+                            {% if value == 0 %}
+                                <td><input type="checkbox" name="key_{{ key }}" value="{{ value }}"></td>
+                             {% else %}
+                                <td><input type="checkbox" name="key_{{ key }}" value="{{ value }}" checked></td>
+                            {% endif %}
+                            <td>{{ key }} :: {{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <button name="submit-availability">Submit</button>
+            </form>
+        {% endif %}
+    {% endblock %}
+
+    {% block show_schedule %} {% endblock %}
+
+{#    {% block show_schedule %}#}
+{#        {% if schedule_ready == True  %}#}
+{#            <p>#}
+{#                {{ schedule }}#}
+{#            </p>#}
+{#            <center>#}
+{#            <h2> *{{ day }} | {{ date|date:"d M, Y" }}* </h2>#}
+{##}
+{#            {% for key, value in schedule.items %}#}
+{#                <h3> _{{ key }}_ </h3>#}
+{#                <p> <b>Lead:</b> {{ value.lead_supervisor }}</p>#}
+{#                <p> <b>Crew:</b> {% for emp in value.crew %} {{ emp }} {% endfor %} </p>#}
+{#            {% endfor %}#}
+{#            </center>#}
+{#        {% endif %}#}
+{#    {% endblock %}#}
+
+</body>
+</html>

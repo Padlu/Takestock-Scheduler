@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        title {text-align: center;}
+        h1 {text-align: center;}
+        p {text-align: center;}
+        button {
+          background-color: #4CAF50; /* Green */
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          border-radius: 8px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>{% block title %} <b>Schedule Start-page</b> {% endblock %}</title>
+</head>
+<body>
+<h1>{% block heading %} Takestock Scheduler {% endblock %}</h1>
+<p>{% block para %} Press below button to start scheduling process {% endblock %}</p>
+
+{% block create_schedule %}
+    <center>
+        <form method="POST" >{% csrf_token %}
+            <button class="button-create-schedule" name="create-schedule" value="create"> Create Schedule </button>
+        </form>
+    </center>
+{% endblock%}
+
+{% if data %}
+    {{ data }}
+    {{ action }}
+{% endif %}
+
+{% block date_select %} {% endblock %}
+
+{% block shop_select %} {% endblock %}
+
+{% block show_selected_shops %} {% endblock %}
+
+{% block availability_select %} {% endblock %}
+
+{% block show_schedule %} {% endblock %}
+
+</body>
+</html>

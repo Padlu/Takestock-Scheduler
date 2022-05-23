@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Schedule for the day! {% endblock %}</title>
+</head>
+
+<body>
+{% block show_schedule %}
+        <center>
+        <h2> *{{ day }} | {{ date|date:"d M, Y" }}* </h2>
+
+        {% for key, value in schedule.items %}
+            <h3> _{{ key }}_ </h3>
+            <p> <b>Lead:</b> {{ value.lead_supervisor }}</p>
+            <p> <b>Crew:</b> {% for emp in value.crew %} {{ emp }} {% endfor %} </p>
+        {% endfor %}
+        </center>
+{% endblock %}
+
+
+</body>
+</html>
